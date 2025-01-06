@@ -34,7 +34,7 @@ class TodoApp extends StatelessWidget {
           onBackground: Colors.black,
           primary: Colors.cyan,
           onPrimary: Colors.black,
-          secondary: Colors.limeAccent,
+          secondary: Color.fromARGB(255, 8, 163, 47),
           onSecondary: Colors.white,
         ),
       ),
