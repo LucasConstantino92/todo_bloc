@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:todoapp/bloc/todo_bloc.dart';
 import 'package:todoapp/data/todo.dart';
 
@@ -142,7 +143,45 @@ class _HomePageState extends State<HomePage> {
         padding: const EdgeInsets.all(16),
         child: BlocBuilder<TodoBloc, TodoState>(builder: (context, state) {
           if (state.status == TodoStatus.success) {
-            return Container();
+            return ListView.builder(
+                itemCount: state.todos.length,
+                itemBuilder: (context, int i) {
+                  return Card(
+                    color: const Color.fromARGB(255, 109, 224, 240),
+                    elevation: 1,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Slidable(
+                      key: const ValueKey(0),
+                      startActionPane: ActionPane(
+                        motion: const ScrollMotion(),
+                        children: [
+                          SlidableAction(
+                            onPressed: (_) {
+                              removeTodo(state.todos[i]);
+                            },
+                            backgroundColor: Colors.red,
+                            foregroundColor: Colors.white,
+                            icon: Icons.delete,
+                            label: 'Deletar',
+                          ),
+                        ],
+                      ),
+                      child: ListTile(
+                        title: Text(state.todos[i].title),
+                        subtitle: Text(state.todos[i].description),
+                        trailing: Checkbox(
+                            value: state.todos[i].isDone,
+                            activeColor:
+                                Theme.of(context).colorScheme.secondary,
+                            onChanged: (value) {
+                              alterTodo(i);
+                            }),
+                      ),
+                    ),
+                  );
+                });
           } else if (state.status == TodoStatus.initial) {
             return const Center(
               child: CircularProgressIndicator(),
